@@ -25,8 +25,7 @@ It combines **Google Gemini** (for text generation) and **Hugging Face Qwen Imag
 
 ## 📦 Installation
 
-Clone the repository:
-```bash
+
 git clone https://github.com/arpitsharma1306/AI_Blog_Companion.git
 cd AI_Blog_Companion
 Create a virtual environment (recommended):
