@@ -1,3 +1,4 @@
+# app.py
 import os
 from dotenv import load_dotenv
 import streamlit as st
@@ -6,12 +7,12 @@ from huggingface_hub import InferenceClient
 from PIL import Image
 from io import BytesIO
 
-# ------------------- DEPLOYMENT FIX FOR CHOREO -------------------
-# Ensure Streamlit runs on the correct host and port
-if "STREAMLIT_SERVER_PORT" not in os.environ:
-    os.environ["STREAMLIT_SERVER_PORT"] = "8080"
-if "STREAMLIT_SERVER_ADDRESS" not in os.environ:
-    os.environ["STREAMLIT_SERVER_ADDRESS"] = "0.0.0.0"
+# ------------------- STREAMLIT ENV FALLBACKS -------------------
+# If the platform provides PORT, pass it to Streamlit env var (fallback).
+# NOTE: we will explicitly pass --server.port $PORT in Render startCommand
+if os.environ.get("PORT") and not os.environ.get("STREAMLIT_SERVER_PORT"):
+    os.environ["STREAMLIT_SERVER_PORT"] = os.environ.get("PORT")
+os.environ.setdefault("STREAMLIT_SERVER_ADDRESS", "0.0.0.0")
 
 # ------------------- LOAD ENVIRONMENT VARIABLES -------------------
 load_dotenv()
@@ -20,14 +21,12 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 if not GOOGLE_API_KEY or not HF_TOKEN:
-    st.error("❌ Missing API keys. Please set GOOGLE_API_KEY and HF_TOKEN in environment variables.")
+    st.error("❌ Missing API keys. Please set GOOGLE_API_KEY and HF_TOKEN in environment variables (Render secrets).")
     st.stop()
 
 # ------------------- CONFIGURE CLIENTS -------------------
-# Configure Gemini client
 genai.configure(api_key=GOOGLE_API_KEY)
 
-# Hugging Face inference client (Qwen Image model)
 client = InferenceClient(
     provider="fal-ai",
     api_key=HF_TOKEN,
