@@ -24,20 +24,24 @@ It combines **Google Gemini** (for text generation) and **Hugging Face Qwen Imag
 ---
 
 ## 📦 Installation
-Clone the repository:
 
+Clone the repository:
 git clone https://github.com/arpitsharma1306/AI_Blog_Companion.git
 cd AI_Blog_Companion
-Create a virtual environment (recommended):
 
+Create a virtual environment (recommended):
 python -m venv venv
+
 # Activate it
+
 # On Windows:
 venv\Scripts\activate
 # On Mac/Linux:
 source venv/bin/activate
+
 Install dependencies:
 pip install -r requirements.txt
+
 🔑 Environment Variables
 Create a .env file in the root directory and add your keys:
 GOOGLE_API_KEY=your_google_gemini_api_key
