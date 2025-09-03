@@ -1,15 +1,22 @@
+import os
+from dotenv import load_dotenv
 import streamlit as st
 import google.generativeai as genai
 from huggingface_hub import InferenceClient
 from PIL import Image
 from io import BytesIO
 
-try:
-    from apikey import GOOGLE_API_KEY, HF_TOKEN
-except ImportError:
-    st.error("❌ apikey.py not found. Please create it with GOOGLE_API_KEY and HF_TOKEN.")
+# ------------------- LOAD ENVIRONMENT VARIABLES -------------------
+load_dotenv()
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+if not GOOGLE_API_KEY or not HF_TOKEN:
+    st.error("❌ Missing API keys. Please set GOOGLE_API_KEY and HF_TOKEN in a .env file or environment.")
     st.stop()
 
+# ------------------- CONFIGURE CLIENTS -------------------
 # Configure Gemini client
 genai.configure(api_key=GOOGLE_API_KEY)
 
@@ -19,6 +26,7 @@ client = InferenceClient(
     api_key=HF_TOKEN,
 )
 
+# ------------------- STREAMLIT PAGE SETTINGS -------------------
 st.set_page_config(
     layout="wide",
     page_title="BlogCraft AI",
