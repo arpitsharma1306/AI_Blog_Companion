@@ -15,6 +15,11 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 if not GOOGLE_API_KEY or not HF_TOKEN:
     st.error("❌ Missing API keys. Please set GOOGLE_API_KEY and HF_TOKEN in a .env file or environment.")
     st.stop()
+    
+# ------------------- STREAMLIT PORT FIX -------------------
+port = int(os.environ.get("PORT", "8080"))
+os.environ["STREAMLIT_SERVER_PORT"] = str(port)
+os.environ["STREAMLIT_SERVER_ADDRESS"] = "0.0.0.0"
 
 # ------------------- CONFIGURE CLIENTS -------------------
 # Configure Gemini client
