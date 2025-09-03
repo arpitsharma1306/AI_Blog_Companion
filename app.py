@@ -6,6 +6,13 @@ from huggingface_hub import InferenceClient
 from PIL import Image
 from io import BytesIO
 
+# ------------------- DEPLOYMENT FIX FOR CHOREO -------------------
+# Ensure Streamlit runs on the correct host and port
+if "STREAMLIT_SERVER_PORT" not in os.environ:
+    os.environ["STREAMLIT_SERVER_PORT"] = "8080"
+if "STREAMLIT_SERVER_ADDRESS" not in os.environ:
+    os.environ["STREAMLIT_SERVER_ADDRESS"] = "0.0.0.0"
+
 # ------------------- LOAD ENVIRONMENT VARIABLES -------------------
 load_dotenv()
 
@@ -13,13 +20,8 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 if not GOOGLE_API_KEY or not HF_TOKEN:
-    st.error("❌ Missing API keys. Please set GOOGLE_API_KEY and HF_TOKEN in a .env file or environment.")
+    st.error("❌ Missing API keys. Please set GOOGLE_API_KEY and HF_TOKEN in environment variables.")
     st.stop()
-    
-# ------------------- STREAMLIT PORT FIX -------------------
-port = int(os.environ.get("PORT", "8080"))
-os.environ["STREAMLIT_SERVER_PORT"] = str(port)
-os.environ["STREAMLIT_SERVER_ADDRESS"] = "0.0.0.0"
 
 # ------------------- CONFIGURE CLIENTS -------------------
 # Configure Gemini client
